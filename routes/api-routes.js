@@ -1,13 +1,10 @@
 const router = require("express").Router();
-const db = require("../models");
+const Workout = require("../models/workout.js");
 
-// const express = require("express");
-// const app = express();
 
-// CRUD: post, get, put, delete
-
+// CRUD routes (minus the D)
 router.get("/api/workouts", (req, res) => {
-  db.Workout.find({})
+  Workout.find({})
     .then(dbWorkout => {
       res.json(dbWorkout);
     })
@@ -16,10 +13,10 @@ router.get("/api/workouts", (req, res) => {
     });
 });
 
-router.put("/api/workouts/:id", ({body, params}, res) => {
-  db.Workout.findByIdAndUpdate(params.id,
-    {$push: {exercises: body}},
-    {new: true, runValidators: true})
+router.put("/api/workouts/:id", (req, res) => {
+  Workout.findByIdAndUpdate(req.params.id,
+    {$push: {exercises: req.body}},
+    {useFindAndModify: false})
     .then(dbWorkout => {
       res.json(dbWorkout);
     })
@@ -29,7 +26,7 @@ router.put("/api/workouts/:id", ({body, params}, res) => {
 });
 
 router.post("/api/workouts", ({ body }, res) => {
-  db.Workout.create(body)
+  Workout.create(body)
     .then(dbWorkout => {
       console.log("dbWorkout", dbWorkout);
       res.json(dbWorkout);
@@ -41,7 +38,9 @@ router.post("/api/workouts", ({ body }, res) => {
 });
 
 router.get("/api/workouts/range", (req, res) => {
-  db.Workout.find({})
+  Workout.find({})
+    .sort({day: -1})
+    .limit(7)
     .then(dbWorkout => {
       res.json(dbWorkout);
     })
