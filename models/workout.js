@@ -1,19 +1,20 @@
-//schema
-
 const mongoose = require("mongoose");
-
 const Schema = mongoose.Schema;
 
 const WorkoutSchema = new Schema({
-  // CODE HERE
   day: {
     type: Date,
   },
   exercises: [
     {
       type: String,
-      name: String, 
+      trim: true,
+      required: [true, 'Please provide an exercise type'],
+      name: String,
+      trim: true,
+      required: [true, 'Please provide a name for your activity'],
       duration: Number,
+      required: [true, 'Please provide duration of exercise'],
       weight: Number,
       reps: Number,
       sets: Number,
